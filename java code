@@ -1,0 +1,51 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class CurrencyConverter {
+    private static final Map<String, Double> exchangeRates = new HashMap<>();
+
+    public static void main(String[] args) {
+        initializeRates();
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to the Currency Converter!");
+
+        System.out.println("Available currencies: " + exchangeRates.keySet());
+
+        System.out.print("Enter the source currency (e.g., USD): ");
+        String fromCurrency = scanner.next().toUpperCase();
+
+        System.out.print("Enter the target currency (e.g., INR): ");
+        String toCurrency = scanner.next().toUpperCase();
+
+        System.out.print("Enter the amount to convert: ");
+        double amount = scanner.nextDouble();
+
+        if (exchangeRates.containsKey(fromCurrency) && exchangeRates.containsKey(toCurrency)) {
+            double convertedAmount = convertCurrency(fromCurrency, toCurrency, amount);
+            System.out.printf("%.2f %s = %.2f %s%n", amount, fromCurrency, convertedAmount, toCurrency);
+        } else {
+            System.out.println("Invalid currency codes entered.");
+        }
+
+        scanner.close();
+    }
+
+    private static void initializeRates() {
+        // Base currency: USD
+        exchangeRates.put("USD", 1.0);     // US Dollar
+        exchangeRates.put("EUR", 0.85);    // Euro
+        exchangeRates.put("INR", 83.12);   // Indian Rupee
+        exchangeRates.put("GBP", 0.75);    // British Pound
+        exchangeRates.put("JPY", 156.40);  // Japanese Yen
+        exchangeRates.put("AUD", 1.50);    // Australian Dollar
+        exchangeRates.put("CAD", 1.36);    // Canadian Dollar
+    }
+
+    private static double convertCurrency(String from, String to, double amount) {
+        double inUSD = amount / exchangeRates.get(from);
+        return inUSD * exchangeRates.get(to);
+    }
+}
